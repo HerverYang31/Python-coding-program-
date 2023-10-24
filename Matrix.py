@@ -1,71 +1,132 @@
+class TwoDArr:
+    def __init__(self, numRows, numCols):
+        self.theRows = [0]*numRows
+        for i in range(numRows):
+            self.theRows[i] = [0]*numCols
+    
+    def nRows(self):
+        return len(self.theRows)
+    
+    def nCols(self):
+        return len(self.theRows[0])
+    
+    def getEle(self,row,col):
+        return self.theRows[row][col]
+    
+    def setEle(self,row,col,nValue):
+        self.theRows[row][col] = nValue
+
 class Matrix:
     def __init__(self,nRows,nCols):
-        self.theRow = [0]*nRows
-        for i in range(nRows):
-            self.theRow[i] = [0]*nCols
+        self.mat =  TwoDArr(nRows,nCols)
     
     def numRows(self):
-        return f"Numbe of the rows: {len(self.theRow)}"
+        return self.mat.nRows()
 
     def numCols(self):
-        return f"Number of the columns: {len(self.theRow[0])}"
+        return self.mat.nCols()
 
     def getItem(self,row,col):
-        return f"The item is {self.theRow[row][col]}"
+        return self.mat.getEle(row,col)
     
-    def setItem(self,row,col,nValue):
-        self.theRow[row][col] = nValue
+    def setItem(self,row,col,aValue):   
+        return self.mat.setEle(row,col,aValue)
     
-    def scalar(self,value):
-        for row in range(len(self.theRow)):
-            for col in range(len(self.theRow[0])):
-                self.theRow[row][col] = (self.theRow[row][col])*value
+    def scalar(m1,value):
+        row = m1.numRows()
+        col = m1.numCols()
+        for i in range(row):
+            for j in range(col):
+                m1.mat.theRows[i][j] = m1.mat.theRows[i][j]*value
+        return m1
     
-    def transpose(self):
-        for row in range(len(self.theRow)):
-            for col in range(len(self.theRow[0])):
-                self.theRow[col][row] = self.theRow[row][col]
+    def transpose(m1):
+        row  = m1.numRows()
+        col = m1.numCols()
+        newM = Matrix(col, row)
+        row = newM.numRows()
+        col = newM.numCols()
+        
+        for i in range(row):
+            for j in range(col):
+                newM.mat.theRows[i][j] = m1.mat.theRows[j][i]
+        return newM
+    
+    def add(m1,m2):
+        row = m1.numRows()
+        col = m1.numCols()
+        m3 = Matrix(row,col)
+        for i in range(row):
+            for j in range(col):
+                m3.mat.theRows[i][j] = m1.mat.theRows[i][j] + m2.mat.theRows[i][j]
+        return m3
+    
+    def subtract(m1,m2):
+        row = m1.numRows()
+        col = m1.numCols()
+        m3 = Matrix(row,col)
+        for i in range(row):
+            for j in range(col):
+                m3.mat.theRows[i][j] = m1.mat.theRows[i][j] - m2.mat.theRows[i][j]
+        return m3
 
+sArr = Matrix(3,2)
+fArr = Matrix(3,2)
 
-def add(aMatrix,bMatrix):
-    for row in range(len(aMatrix)):
-        for col in range(len(aMatrix[0])):
-            aMatrix[row][col] = aMatrix[row][col] + bMatrix[row][col]
-    return aMatrix
-
-
-sArr = Matrix(2,3)
-
-for row in range(2):
-    for col in range(3):
-        sArr.theRow[row][col] = int(input("Enter your number: "))
-
+for row in range(3):
+    for col in range(2):
+        sArr.mat.theRows[row][col]= int(input("Enter your input: "))
+for row in range(3):
+    for col in range(2):
+        fArr.mat.theRows[row][col]= int(input("Enter your input: "))
+        
+for row in range(3):
+    for col in range(2):
+        print(sArr.mat.theRows[row][col], end=' ')
+    print()
 print()
-print(sArr.numRows())
-print(sArr.numCols())
-print(sArr.getItem(0,0))
-sArr.scalar(3)
-print()
-print("Scalar Multiplication")
-for row in range(len(sArr.theRow)):
-    print(sArr.theRow[row])
+for row in range(3):
+    for col in range(2):
+        print(fArr.mat.theRows[row][col], end=' ')
+    print()
+print()    
+nArr = Matrix.add(sArr,fArr)
+row = nArr.mat.nRows()
+col = nArr.mat.nCols()
+print('addition of two matrices')
+for i in range(row):
+    for j in range(col):
+        print(nArr.mat.theRows[i][j], end=' ')
+    print()
 
-print()
-print("Transpose")
-sArr.transpose()
-for row in range(len(sArr.theRow)):
-    print(sArr.theRow[row])
+scArr = Matrix.scalar(nArr, 2)
+row = scArr.mat.nRows()
+col = scArr.mat.nCols()
+print('scalar multiplication')
+for i in range(row):
+    for j in range(col):
+        print(scArr.mat.theRows[i][j], end=' ')
+    print()
+    
+tArr = Matrix.transpose(scArr)
+row = tArr.mat.nRows()
+col = tArr.mat.nCols()
+print('transpose')
+for i in range(row):
+    for j in range(col):
+        print(tArr.mat.theRows[i][j], end=' ')
+    print()
 
-matrix1 = [[11,22,33,44],
-           [55,66,77,88],
-           [99,111,222,333],
-           [444,555,666,777]]
-matrix2 = [[777,666,555,444],
-           [333,222,111,99],
-           [88,77,66,55],
-           [44,33,22,11]]
+subArr = Matrix.subtract(sArr,fArr)
+row = sArr.mat.nRows()
+col = sArr.mat.nCols()
+print('Subtract')
+for i in range(row):
+    for j in range(col):
+        print(subArr.mat.theRows[i][j], end = " ")
+    print()
 
-matrix1.add(matrix1,matrix2)
-for row in range(len(matrix1)):
-    print(matrix1[row])
+
+
+
 
